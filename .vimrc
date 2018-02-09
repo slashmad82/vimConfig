@@ -8,18 +8,18 @@ filetype plugin on
 "set autochdir
 
 "disabilitare freccie
-nnoremap <Left> :echo "No left for you!"<CR>
-vnoremap <Left> :<C-u>echo "No left for you!"<CR>
-inoremap <Left> <C-o>:echo "No left for you!"<CR>
-nnoremap <Right> :echo "No left for you!"<CR>
-vnoremap <Right> :<C-u>echo "No left for you!"<CR>
-inoremap <Right> <C-o>:echo "No left for you!"<CR>
-nnoremap <Up> :echo "No left for you!"<CR>
-vnoremap <Up> :<C-u>echo "No left for you!"<CR>
-inoremap <Up> <C-o>:echo "No left for you!"<CR>
-nnoremap <Down> :echo "No left for you!"<CR>
-vnoremap <Down> :<C-u>echo "No left for you!"<CR>
-inoremap <Down> <C-o>:echo "No left for you!"<CR>
+"nnoremap <Left> :echo "No left for you!"<CR>
+"vnoremap <Left> :<C-u>echo "No left for you!"<CR>
+"inoremap <Left> <C-o>:echo "No left for you!"<CR>
+"nnoremap <Right> :echo "No left for you!"<CR>
+"vnoremap <Right> :<C-u>echo "No left for you!"<CR>
+"inoremap <Right> <C-o>:echo "No left for you!"<CR>
+"nnoremap <Up> :echo "No left for you!"<CR>
+"vnoremap <Up> :<C-u>echo "No left for you!"<CR>
+"inoremap <Up> <C-o>:echo "No left for you!"<CR>
+"nnoremap <Down> :echo "No left for you!"<CR>
+"vnoremap <Down> :<C-u>echo "No left for you!"<CR>
+"inoremap <Down> <C-o>:echo "No left for you!"<CR>
 
 "tab_spaces
 set tabstop=4 "number of visual spaces per TAB
@@ -49,28 +49,43 @@ set path+=** "search down into subfolders-provides tab-completion for all file r
 
 "key mapping
 inoremap jj <ESC>
-map <F2> :!ctags -R * --fields=+S /usr/include<CR>
+map <F2> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q . /usr/include/alsa/ /usr/include/Wt/<CR>
+"map <F2> :!ctags -R * --fields=+S /usr/include<CR>
 map <F4> :!ctags -R *
-map <F7> <ESC>:w<CR>:make<CR>:cw<CR>
+"map <F7> <ESC>:w<CR>:!cd build && make<CR>:cw<CR>
+map <F7> <ESC>:w<CR>:!make<CR>:cw<CR>
 map <F8> <ESC>:w<CR>:!make clean<CR>:make<CR>
 map <C-F12> <C-w>g<C-]>
 map <F12> <ESC>:w<CR> <C-]>
 
 	"find
 nmap <F3> :execute "grep! -Irn --exclude=tags " . shellescape(expand("<cword>")) . " ."<cr>:cw<cr>
-vmap <F3> y:vimgrep '<c-r>"' *.{cpp,h}<CR>:cw<cr>
+vmap <F3> y:vimgrep '<c-r>"' **/*.c **/*.cpp **/*.h<CR>:cw<cr>
 "vmap :%s/parolaDaSost/Sostituta/gc 
 
 " bind § to grep shortcut
-command -nargs=+ -complete=file -bar Cerca execute 'silent! grep! -Ir <args> --exclude=tags' | execute 'redraw!' | execute 'cw'
+command! -nargs=+ -complete=file -bar Cerca execute 'silent! grep! -Ir <args> --exclude=tags' | execute 'redraw!' | execute 'cw'
 nnoremap § :Cerca<SPACE>
+
+" bind  for breakpoints to clipboard for gdb
+command! Xg :let @+ = 'b ' . expand('%:p') . ':' . line('.')
+nnoremap °° :Xg<CR>
 
 "ALT mapping for moving lines
 nnoremap <C-j> ddp
 nnoremap <C-k> ddkP
 
-inoremap <C-j> <Esc>ddp==gi
-inoremap <C-k> <Esc>ddkP==gi
+"in insert and visual mode ctrl-jk to move line up and down
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
+"in normal mode ctrl-jklh to move between splits
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 "highlight tab and spaces
 "map <F4> :match Conceal /\t/ da usare per vim..
