@@ -1,5 +1,7 @@
 "colors
-colorscheme desert 
+colorscheme gentooish
+"colorscheme desert 
+set t_Co=256
 syntax enable 
 
 "general
