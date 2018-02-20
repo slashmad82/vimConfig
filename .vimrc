@@ -4,6 +4,11 @@ colorscheme gentooish
 set t_Co=256
 syntax enable 
 
+"italic comments
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
+highlight Comment cterm=italic
+
 "general
 set nocompatible
 filetype plugin on
