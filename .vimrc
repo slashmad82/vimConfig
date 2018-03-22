@@ -4,11 +4,6 @@ colorscheme gentooish
 set t_Co=256
 syntax enable 
 
-"italic comments
-let &t_ZH="\e[3m"
-let &t_ZR="\e[23m"
-highlight Comment cterm=italic
-
 "general
 set nocompatible
 filetype plugin on
@@ -56,12 +51,33 @@ set path+=** "search down into subfolders-provides tab-completion for all file r
 
 "key mapping
 inoremap jj <ESC>
+
+"ctags stuff..
 map <F2> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q . /usr/include/alsa/ /usr/include/Wt/<CR>
 "map <F2> :!ctags -R * --fields=+S /usr/include<CR>
-map <F4> :!ctags -R *
+"map <F2> :!ctags -R *
+
+"let project_make_path = 'build' "set here the makefile dir.current folder: getcwd()
+"autocmd filetype c nnoremap <F7> :w <bar> exec '!cd '.shellescape(project_make_path).' && make'<CR><CR>:cw<CR>
+
+"change here below the path of makefile with -> -C <path_where_makefile_is_loacted>
+map <F7> <ESC>:w<CR>:cexpr []<CR>:make<CR>:cw<CR>
+"example: map <F7> <ESC>:w<CR>:cexpr []<CR>:make -C build<CR>:cw<CR>
+"
 "map <F7> <ESC>:w<CR>:!cd build && make<CR>:cw<CR>
-map <F7> <ESC>:w<CR>:!make<CR>:cw<CR>
+"map <F7> <ESC>:w<CR>:!make<CR>:cw<CR>
+
 map <F8> <ESC>:w<CR>:!make clean<CR>:make<CR>
+
+"try to fast compile by type
+autocmd filetype python nnoremap <F9> :w <bar> exec '!python<CR>
+autocmd filetype c nnoremap <F9> :w <bar> exec '!gcc -g '.shellescape('%').' -o '.shellescape('%:r')<CR>
+autocmd filetype cpp nnoremap <F9> :w <bar> exec '!g++ -g -std=c++11 '.shellescape('%').' -o '.shellescape('%:r')<CR>
+"try to fast compile and run
+autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR>
+autocmd filetype c nnoremap <F5> :w <bar> exec '!gcc -g '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+autocmd filetype cpp nnoremap <F5> :w <bar> exec '!g++ -g -std=c++11 '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+
 map <C-F12> <C-w>g<C-]>
 map <F12> <ESC>:w<CR> <C-]>
 
@@ -95,8 +111,7 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 "highlight tab and spaces
-"map <F4> :match Conceal /\t/ da usare per vim..
-map <F4> :match Conceal /\t/
+map <F4> :match Pmenu /\t/
 "set match Error /\S\zs\s\+$
 
 "cycling between buffers
